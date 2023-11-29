@@ -22,7 +22,7 @@ JobSchedule jobSchedule = new JobSchedule(
     Guid.NewGuid(),
     jobType: typeof(SendNotificationCronJob),
     "NotificationJob",
-    cronExpression: "0/30 * * * * ?");
+    cronExpression: "0 0 * ? * * *");
 
 builder.Services.AddSingleton(jobSchedule);
 
@@ -32,11 +32,8 @@ builder.Services.AddHostedService<QuartzHostedService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

@@ -7,13 +7,13 @@ namespace IAP.Requests
         public SendRequestVariable(AuvikRequest auvikRequest)
         {
             clientId = "1032914113525458685";
-            endDate = auvikRequest.EndDate;
+            endDate = auvikRequest.EndDate.GetValueOrDefault().AddHours(-7);
             exporterId = "";
             mspId = "1012609622137906942";
             scrollId = null;
             sortings = new Sorting { event_ts = "DESC" };
             size = "10000";
-            startDate = auvikRequest.StartDate;
+            startDate = auvikRequest.StartDate.GetValueOrDefault().AddHours(-7);
             targetDomainPrefix = "capstonefpt";
         }
 

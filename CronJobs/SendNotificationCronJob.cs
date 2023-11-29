@@ -23,7 +23,7 @@ namespace IAP.CronJobs
 
             if (warningLogs.Count() > 0)
             {
-                string message = "There are " + warningLogs.Count() + " warning logs from Auvik from " + startDate + " to " + endDate + "!";
+                string message = "There are " + warningLogs.Count() + " warning logs from Auvik from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + "!";
                 string botToken = "6720093868:AAF-i_TcWt9EkSH5QDPTBX6K1D-Xe9dVeT4";
                 var botClient = new TelegramBotClient(botToken);
                 string chatId = "-4025383582";
