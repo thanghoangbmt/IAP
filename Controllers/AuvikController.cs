@@ -1,11 +1,9 @@
 ﻿using IAP.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using IAP.Requests;
 using Telegram.Bot;
 using System;
 using IAP.Responses;
-using System.Linq;
 using IAP.Enums;
 
 namespace IAP.Controllers
@@ -20,6 +18,13 @@ namespace IAP.Controllers
         public async Task<ActionResult> GetSyslog([FromBody] AuvikRequest request)
         {
             var syslog = service.GetSysLog(request);
+            return Ok(syslog);
+        }
+
+        [HttpPost("distinctDevice")]
+        public async Task<ActionResult> GetDistinctDevice([FromBody] AuvikRequest request)
+        {
+            var syslog = service.GetDistinctDevice(request);
             return Ok(syslog);
         }
 
