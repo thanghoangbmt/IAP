@@ -16,15 +16,20 @@ builder.Services.AddSingleton<IJobFactory, JobFactory>();
 builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 // Add our job
-builder.Services.AddSingleton<SendNotificationCronJob>();
+builder.Services.AddSingleton<SendImportantNotificationCronJob>();
+builder.Services.AddSingleton<SendNormalNotificationCronJob>();
 
-JobSchedule jobSchedule = new JobSchedule(
-    Guid.NewGuid(),
-    jobType: typeof(SendNotificationCronJob),
-    "NotificationJob",
-    cronExpression: "0 0 * ? * * *");
+builder.Services.AddSingleton(new JobSchedule(
+    Guid.Parse("0ea7fd03-8465-4be6-846f-f9758e329098"),
+    jobType: typeof(SendImportantNotificationCronJob),
+    "ImportantNotificationJob",
+    cronExpression: "0 0/15 * ? * * * "));
 
-builder.Services.AddSingleton(jobSchedule);
+builder.Services.AddSingleton(new JobSchedule(
+    Guid.Parse("3504147b-b835-4866-a8c9-b648e2b1e431"),
+    jobType: typeof(SendNormalNotificationCronJob),
+    "NormalNotificationJob",
+    cronExpression: "0 0/30 * ? * * * "));
 
 builder.Services.AddHostedService<QuartzHostedService>();
 

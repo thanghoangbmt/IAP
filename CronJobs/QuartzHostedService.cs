@@ -7,12 +7,13 @@ namespace IAP.CronJobs
     {
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly IJobFactory _jobFactory;
-        private readonly JobSchedule _jobSchedule;
+        private readonly IEnumerable<JobSchedule> _jobSchedules;
 
-        public QuartzHostedService(ISchedulerFactory schedulerFactory, IJobFactory jobFactory, JobSchedule jobSchedule)
+
+        public QuartzHostedService(ISchedulerFactory schedulerFactory, IJobFactory jobFactory, IEnumerable<JobSchedule> jobSchedules)
         {
             _schedulerFactory = schedulerFactory;
-            _jobSchedule = jobSchedule;
+            _jobSchedules = jobSchedules;
             _jobFactory = jobFactory;
         }
 
@@ -20,14 +21,16 @@ namespace IAP.CronJobs
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            Scheduler = await _schedulerFactory.GetScheduler();
+            Scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
             Scheduler.JobFactory = _jobFactory;
 
-          
-            var job = CreateJob(_jobSchedule);
-            var trigger = CreateTrigger(_jobSchedule);
+            foreach (var jobSchedule in _jobSchedules)
+            {
+                var job = CreateJob(jobSchedule);
+                var trigger = CreateTrigger(jobSchedule);
 
-            await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+            }
 
             await Scheduler.Start(cancellationToken);
         }
