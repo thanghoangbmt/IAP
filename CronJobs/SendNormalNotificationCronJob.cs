@@ -22,15 +22,22 @@ namespace IAP.CronJobs
             var informationLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Informational).Count();
             var debugLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Debug).Count();
 
-            string message = "There are " + warningLogCount + " warning, "
-                + noticeLogCount + " notice, "
-                + informationLogCount + " information, "
-                + debugLogCount + " debug "
-                + "logs from Auvik from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + "!";
-            string botToken = "6720093868:AAF-i_TcWt9EkSH5QDPTBX6K1D-Xe9dVeT4";
-            var botClient = new TelegramBotClient(botToken);
-            string chatId = "-4025383582";
-            await botClient.SendTextMessageAsync(chatId, message);
+            if (warningLogCount > 0 || noticeLogCount > 0 || informationLogCount > 0 || debugLogCount > 0)
+            {
+                string message = "Auvik syslog's normal notification from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + ": \r\n";
+                if (warningLogCount > 0)
+                    message += "- Warning log: " + warningLogCount + ".\r\n";
+                if (noticeLogCount > 0)
+                    message += "- Notice log: " + noticeLogCount + ".\r\n";
+                if (informationLogCount > 0)
+                    message += "- Information log: " + informationLogCount + ".\r\n";
+                if (debugLogCount > 0)
+                    message += "- Debug log: " + debugLogCount + ".";
+                string botToken = "6757127481:AAEFs5S0tw9sv4AlPt3P2wKkvjrADPhaS2A";
+                var botClient = new TelegramBotClient(botToken);
+                string chatId = "-4071366636";
+                await botClient.SendTextMessageAsync(chatId, message);
+            }
         }
     }
 }

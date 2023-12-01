@@ -22,16 +22,22 @@ namespace IAP.CronJobs
             var criticalLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Critical).Count();
             var errorLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Error).Count();
 
-            string message = "There are " + emergencyLogCount + " emergency, " 
-                + alertLogCount + " alert, "
-                + criticalLogCount + " critical, "
-                + errorLogCount + " error "
-                + "logs from Auvik from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + "!";
-            string botToken = "6720093868:AAF-i_TcWt9EkSH5QDPTBX6K1D-Xe9dVeT4";
-            var botClient = new TelegramBotClient(botToken);
-            string chatId = "-4025383582";
-            await botClient.SendTextMessageAsync(chatId, message);
-
+            if (emergencyLogCount > 0 || alertLogCount > 0 || criticalLogCount > 0 || errorLogCount > 0)
+            {
+                string message = "Auvik syslog's important notification from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + ": \r\n";
+                if (emergencyLogCount > 0)
+                    message += "- Emergency log: " + emergencyLogCount + ".\r\n";
+                if (alertLogCount > 0)
+                    message += "- Alert log: " + alertLogCount + ".\r\n";
+                if (criticalLogCount > 0)
+                    message += "- Critical log: " + criticalLogCount + ".\r\n";
+                if (errorLogCount > 0)
+                    message += "- Error log: " + errorLogCount + ".";
+                string botToken = "6757127481:AAEFs5S0tw9sv4AlPt3P2wKkvjrADPhaS2A";
+                var botClient = new TelegramBotClient(botToken);
+                string chatId = "-4071366636";
+                await botClient.SendTextMessageAsync(chatId, message);
+            }
         }
     }
 }

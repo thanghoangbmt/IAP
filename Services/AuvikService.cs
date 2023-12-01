@@ -59,8 +59,8 @@ namespace IAP.Services
         private RestResponse? SendRequestToAuvik(AuvikRequest auvikRequest)
         {
             var client = new RestClient("https://capstonefpt.au1.my.auvik.com/graphql");
-            var username = "thanghoang.bmt@gmail.com";
-            var password = "i3fjmcLY7KW/O5sYUHhs3qyhOpHdaQeqAdE6osf6qaVFUSjf";
+            var username = "trungntse161075@fpt.edu.vn";
+            var password = "pA03qQ16LXq3J/M9RIn+ecMA5SaMw9tUDe0/oT09x1Cxhvli";
 
             RestRequest restRequest = new RestRequest();
             restRequest.Authenticator = new HttpBasicAuthenticator(username, password);
