@@ -13,7 +13,7 @@ namespace IAP.CronJobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var endDate = DateTime.UtcNow;
+            var endDate = DateTime.UtcNow.AddHours(7).AddMinutes(-2);
             var startDate = endDate.AddMinutes(-30);
             var auvikRequest = new AuvikRequest() { StartDate = startDate, EndDate = endDate };
             AuvikSyslogResponse auvikSyslogResponse = service.GetSysLogForSendMessage(auvikRequest);
@@ -24,7 +24,7 @@ namespace IAP.CronJobs
 
             if (warningLogCount > 0 || noticeLogCount > 0 || informationLogCount > 0 || debugLogCount > 0)
             {
-                string message = "Auvik syslog's normal notification from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + ": \r\n";
+                string message = "Auvik syslog's normal notification from " + startDate + " to " + endDate + ": \r\n";
                 if (warningLogCount > 0)
                     message += "- Warning log: " + warningLogCount + ".\r\n";
                 if (noticeLogCount > 0)

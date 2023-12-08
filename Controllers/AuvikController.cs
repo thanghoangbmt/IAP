@@ -30,7 +30,7 @@ namespace IAP.Controllers
         [HttpPost("tele-normal")]
         public async Task<ActionResult> SendNormalMessageToTelegram([FromBody] AuvikRequest request)
         {
-            var auvikRequest = new AuvikRequest() { StartDate = request.StartDate.GetValueOrDefault().AddHours(-7), EndDate = request.EndDate.GetValueOrDefault().AddHours(-7) };
+            var auvikRequest = new AuvikRequest() { StartDate = request.StartDate.GetValueOrDefault(), EndDate = request.EndDate.GetValueOrDefault() };
             AuvikSyslogResponse auvikSyslogResponse = service.GetSysLogForSendMessage(auvikRequest);
             var warningLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Warning).Count();
             var noticeLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Notice).Count();
@@ -59,7 +59,7 @@ namespace IAP.Controllers
         [HttpPost("tele-important")]
         public async Task<ActionResult> SendImportantMessageToTelegram([FromBody] AuvikRequest request)
         {
-            var auvikRequest = new AuvikRequest() { StartDate = request.StartDate.GetValueOrDefault().AddHours(-7), EndDate = request.EndDate.GetValueOrDefault().AddHours(-7) };
+            var auvikRequest = new AuvikRequest() { StartDate = request.StartDate.GetValueOrDefault(), EndDate = request.EndDate.GetValueOrDefault() };
             AuvikSyslogResponse auvikSyslogResponse = service.GetSysLogForSendMessage(auvikRequest);
 
             var emergencyLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Emergency).Count();

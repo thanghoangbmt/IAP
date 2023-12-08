@@ -13,8 +13,8 @@ namespace IAP.CronJobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var endDate = DateTime.UtcNow;
-            var startDate = endDate.AddSeconds(-30);
+            var endDate = DateTime.UtcNow.AddHours(7).AddMinutes(-2);
+            var startDate = endDate.AddMinutes(-5);
             var auvikRequest = new AuvikRequest() { StartDate = startDate, EndDate = endDate };
             AuvikSyslogResponse auvikSyslogResponse = service.GetSysLogForSendMessage(auvikRequest);
             var emergencyLogCount = auvikSyslogResponse.data.logs.lines.Where(line => line.severity == (int)AuvikSeverityEnum.Emergency).Count();
@@ -24,7 +24,7 @@ namespace IAP.CronJobs
 
             if (emergencyLogCount > 0 || alertLogCount > 0 || criticalLogCount > 0 || errorLogCount > 0)
             {
-                string message = "Auvik syslog's important notification from " + startDate.AddHours(7) + " to " + endDate.AddHours(7) + ": \r\n";
+                string message = "Auvik syslog's important notification from " + startDate + " to " + endDate + ": \r\n";
                 if (emergencyLogCount > 0)
                     message += "- Emergency log: " + emergencyLogCount + ".\r\n";
                 if (alertLogCount > 0)

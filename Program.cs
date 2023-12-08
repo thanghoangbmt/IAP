@@ -20,20 +20,22 @@ builder.Services.AddSingleton<SendImportantNotificationCronJob>();
 builder.Services.AddSingleton<SendNormalNotificationCronJob>();
 
 //Cron expression:
-// - "0 0/15 * ? * * *": 15m
-// - "0 0/30 * ? * * *": 30m
-// - "0/30 * * ? * * *": 30s
+// - "0 0/15 * ? * * *": At second :00, every 15 minutes starting at minute :00, of every hour
+// - "0 0/30 * ? * * *": At second :00, every 30 minutes starting at minute :00, of every hour
+// - "0/30 * * ? * * *": Every 30 seconds starting at :00 second after the minute
+// - "0 2/5 * ? * * *" : At second :00, every 5 minutes starting at minute :02, of every hour
+// - "0 2/30 * ? * * *": At second :00, every 30 minutes starting at minute :02, of every hour
 builder.Services.AddSingleton(new JobSchedule(
     Guid.Parse("0ea7fd03-8465-4be6-846f-f9758e329098"),
     jobType: typeof(SendImportantNotificationCronJob),
     "ImportantNotificationJob",
-    cronExpression: "0/30 * * ? * * *")); //30s
+    cronExpression: "0 2/5 * ? * * *"));
 
 builder.Services.AddSingleton(new JobSchedule(
     Guid.Parse("3504147b-b835-4866-a8c9-b648e2b1e431"),
     jobType: typeof(SendNormalNotificationCronJob),
     "NormalNotificationJob",
-    cronExpression: "0 0/30 * ? * * *")); //30m
+    cronExpression: "0 2/30 * ? * * *"));
 
 builder.Services.AddHostedService<QuartzHostedService>();
 
